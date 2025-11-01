@@ -43,6 +43,7 @@ export default function ProductDetail({
 }: {
   params: { slug: Slug | string };
 }) {
+
   const data = copy[params.slug as Slug];
   if (!data) return notFound();
 
