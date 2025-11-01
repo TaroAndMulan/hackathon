@@ -2,10 +2,17 @@
 import { useState } from "react";
 import { chat, ingest } from "@/lib/api";
 
+type RetrievedChunk = {
+  content: string;
+  score?: number; // optional if backend may not send it
+  // you can keep other fields too
+  // sourceId?: string;
+};
+
 export default function Chat() {
   const [q, setQ] = useState("");
   const [answer, setAnswer] = useState<string>("");
-  const [context, setContext] = useState([]);
+  const [context, setContext] = useState<RetrievedChunk[]>([]);
   const [busy, setBusy] = useState(false);
   const [ingestText, setIngestText] = useState("");
 
@@ -16,7 +23,8 @@ export default function Chat() {
     try {
       const res = await chat(q.trim());
       setAnswer(res.answer);
-      setContext(res.context || []);
+      // ensure the array is the right shape
+      setContext((res.context as RetrievedChunk[]) || []);
     } finally {
       setBusy(false);
     }
@@ -102,7 +110,8 @@ export default function Chat() {
           >
             {busy ? (
               <span className="inline-flex items-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-black border-top-transparent border-t-transparent" />
+                {/* note: 'border-top-transparent' isn't a Tailwind class; use border-t-transparent */}
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-black border-t-transparent" />
                 Thinking…
               </span>
             ) : (
@@ -130,9 +139,11 @@ export default function Chat() {
                   {context.map((c, idx) => (
                     <li key={idx} className="rounded-xl border border-amber-300 bg-white p-3 shadow-sm">
                       <div className="mb-1">
-                        <span className="inline-flex items-center rounded-md bg-amber-200 px-2 py-0.5 text-[11px] font-semibold">
-                          score {c.score.toFixed(4)}
-                        </span>
+                        {typeof c.score === "number" && (
+                          <span className="inline-flex items-center rounded-md bg-amber-200 px-2 py-0.5 text-[11px] font-semibold">
+                            score {c.score.toFixed(4)}
+                          </span>
+                        )}
                       </div>
                       <div className="whitespace-pre-wrap text-sm leading-relaxed">
                         {c.content}
