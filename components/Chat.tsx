@@ -5,7 +5,7 @@ import { chat, ingest } from "@/lib/api";
 export default function Chat() {
   const [q, setQ] = useState("");
   const [answer, setAnswer] = useState<string>("");
-  const [context, setContext] = useState<any[]>([]);
+  const [context, setContext] = useState([]);
   const [busy, setBusy] = useState(false);
   const [ingestText, setIngestText] = useState("");
 

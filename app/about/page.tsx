@@ -79,7 +79,7 @@ export default function AboutPage() {
 
           {/* Subheading / mission */}
           <p className="text-base md:text-xl lg:text-2xl text-gray-700 leading-relaxed max-w-3xl mx-auto px-4 font-medium drop-shadow-sm">
-            We're a small team of clinicians, engineers, and designers on a mission
+            We are a small team of clinicians, engineers, and designers on a mission
             to make fear care accessible—turning evidence-based methods into gentle,
             game-like tools that fit real life.
           </p>
